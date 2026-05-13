@@ -28,23 +28,36 @@
 
 # print(response.text)
 ##########################################################################
+# from db.mongodb import customers_collection
+
+# sample_customers = [
+#     {
+#         "name": "Rahul",
+#         "last_purchase_days": 30,
+#         "sentiment": "negative",
+#         "response_delay_days": 12
+#     },
+#     {
+#         "name": "Priya",
+#         "last_purchase_days": 5,
+#         "sentiment": "positive",
+#         "response_delay_days": 1
+#     }
+# ]
+
+# customers_collection.insert_many(sample_customers)
+
+# print("Sample customers inserted!")
+########################################################################
 from db.mongodb import customers_collection
+from agents.churn_agent import analyze_customer
 
-sample_customers = [
-    {
-        "name": "Rahul",
-        "last_purchase_days": 30,
-        "sentiment": "negative",
-        "response_delay_days": 12
-    },
-    {
-        "name": "Priya",
-        "last_purchase_days": 5,
-        "sentiment": "positive",
-        "response_delay_days": 1
-    }
-]
+customers = customers_collection.find()
 
-customers_collection.insert_many(sample_customers)
+for customer in customers:
 
-print("Sample customers inserted!")
+    result = analyze_customer(customer)
+
+    print("\n====================")
+    print(f"Customer: {customer['name']}")
+    print(result)
