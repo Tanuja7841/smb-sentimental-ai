@@ -1,0 +1,32 @@
+[
+    {
+        "agent": "Sentiment Agent",
+        "customer": "Rahul",
+        "event": "Negative sentiment detected",
+        "severity": "High"
+    },
+    {
+        "agent": "Sentiment Agent",
+        "customer": "Arjun",
+        "event": "Negative sentiment detected",
+        "severity": "High"
+    },
+    {
+        "agent": "Sentiment Agent",
+        "customer": "Rahul",
+        "event": "Negative sentiment detected",
+        "severity": "High"
+    },
+    {
+        "agent": "Orchestrator",
+        "customer": "Rahul",
+        "event": "Full escalation workflow triggered",
+        "severity": "Critical"
+    },
+    {
+        "agent": "Sentiment Agent",
+        "customer": "Arjun",
+        "event": "Negative sentiment detected",
+        "severity": "High"
+    }
+]

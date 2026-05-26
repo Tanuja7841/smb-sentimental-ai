@@ -1,0 +1,29 @@
+[
+  {
+    "customer_id": 1,
+    "name": "Rahul",
+    "business": "Retail Shop",
+    "last_purchase_days": 35,
+    "sentiment": "negative",
+    "response_delay_days": 12,
+    "total_spent": 12000
+  },
+  {
+    "customer_id": 2,
+    "name": "Priya",
+    "business": "Salon",
+    "last_purchase_days": 5,
+    "sentiment": "positive",
+    "response_delay_days": 1,
+    "total_spent": 42000
+  },
+  {
+    "customer_id": 3,
+    "name": "Arjun",
+    "business": "Cafe",
+    "last_purchase_days": 50,
+    "sentiment": "negative",
+    "response_delay_days": 20,
+    "total_spent": 8000
+  }
+]

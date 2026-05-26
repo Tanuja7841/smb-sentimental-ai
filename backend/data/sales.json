@@ -1,0 +1,14 @@
+[
+  {
+    "month": "January",
+    "sales": 120000
+  },
+  {
+    "month": "February",
+    "sales": 110000
+  },
+  {
+    "month": "March",
+    "sales": 85000
+  }
+]

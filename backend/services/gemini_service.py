@@ -1,17 +1,30 @@
 from google import genai
+from dotenv import load_dotenv
+from pathlib import Path
 import os
 
-client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+# Load environment variables
+env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+
+load_dotenv(dotenv_path=env_path)
+
+# Create Gemini client
+client = genai.Client(
+    api_key=os.getenv("GEMINI_API_KEY")
+)
+
 
 def ask_gemini(prompt):
+
     try:
+
         response = client.models.generate_content(
-            model="gemini-2.0-flash",
+            model="gemini-2.5-flash",
             contents=prompt
         )
+
         return response.text
+
     except Exception as e:
-        print("Gemini error:", e)
-        
-        # ✅ fallback (demo-safe)
-        return "Customer may churn due to low engagement, reduced activity, and declining interaction with the product."
+
+        return f"Gemini Error: {str(e)}"

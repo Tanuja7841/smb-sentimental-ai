@@ -7,11 +7,19 @@ load_dotenv()
 
 mongo_uri = os.getenv("MONGO_URI")
 
+
 client = MongoClient(
     mongo_uri,
-    tlsCAFile=certifi.where()
+    tls=True,
+    tlsAllowInvalidCertificates=True
 )
 
-db = client["smb_sentinel"]
 
+try:
+    client.admin.command("ping")
+    print("✅ Connected to MongoDB!")
+except Exception as e:
+    print("❌ Connection failed:", e)
+
+db = client["smb_sentinel"]
 customers_collection = db["customers"]

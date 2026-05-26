@@ -1,0 +1,14 @@
+[
+  {
+    "customer": "Rahul",
+    "message": "Your service has become very slow recently and nobody responds on time."
+  },
+  {
+    "customer": "Priya",
+    "message": "Thank you for the excellent support experience!"
+  },
+  {
+    "customer": "Arjun",
+    "message": "This is the worst support I have ever experienced. I need refund immediately."
+  }
+]

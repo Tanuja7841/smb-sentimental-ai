@@ -1,22 +1,45 @@
 from services.gemini_service import ask_gemini
+from services.analytics_service import (
+    calculate_churn_score,
+    classify_risk
+)
+
 
 def analyze_customer(customer):
 
+    churn_score = calculate_churn_score(customer)
+
+    risk_level = classify_risk(churn_score)
+
     prompt = f"""
-    Analyze this customer for churn risk.
+    You are an elite AI business operations agent.
 
-    Customer Data:
-    Name: {customer['name']}
-    Last Purchase Days: {customer['last_purchase_days']}
-    Sentiment: {customer['sentiment']}
-    Response Delay Days: {customer['response_delay_days']}
+    Analyze this customer.
 
-    Return:
-    1. Churn Risk (Low/Medium/High)
-    2. Explanation
-    3. Recommended Action
+    Customer:
+    {customer}
+
+    Churn Score:
+    {churn_score}/100
+
+    Risk Level:
+    {risk_level}
+
+    Tasks:
+    1. Explain WHY customer may churn
+    2. Explain urgency
+    3. Recommend immediate actions
+    4. Suggest long-term retention strategy
+    5. Explain business impact
+
+    Keep response concise but executive-level.
     """
 
-    response = ask_gemini(prompt)
+    ai_analysis = ask_gemini(prompt)
 
-    return response
+    return {
+        "customer": customer["name"],
+        "churn_score": churn_score,
+        "risk_level": risk_level,
+        "analysis": ai_analysis
+    }

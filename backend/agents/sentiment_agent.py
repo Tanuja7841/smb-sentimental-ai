@@ -1,0 +1,58 @@
+from services.gemini_service import ask_gemini
+import json
+from services.memory_service import add_memory
+
+def analyze_message(message_data):
+
+    prompt = f"""
+    You are an AI customer sentiment analyst.
+
+    Analyze this message.
+
+    Message:
+    {message_data}
+
+    Return ONLY valid JSON.
+
+    JSON format:
+
+    {{
+        "sentiment": "",
+        "urgency": "",
+        "frustration_level": "",
+        "business_risk": "",
+        "recommended_action": ""
+    }}
+
+    Do not return markdown.
+    Do not explain anything outside JSON.
+    """
+
+    result = ask_gemini(prompt)
+
+    if "Negative" in str(result):
+
+        add_memory(
+            agent="Sentiment Agent",
+            customer=message_data["customer"],
+            event="Negative sentiment detected",
+            severity="High"
+        )
+        
+    try:
+
+        cleaned = result.strip()
+
+        if cleaned.startswith("```json"):
+            cleaned = cleaned.replace("```json", "")
+            cleaned = cleaned.replace("```", "")
+
+        return json.loads(cleaned)
+
+    except Exception as e:
+
+        return {
+            "error": str(e),
+            "raw_response": result
+        }
+    
