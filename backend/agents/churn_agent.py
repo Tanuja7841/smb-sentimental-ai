@@ -1,5 +1,5 @@
-from services.gemini_service import ask_gemini
-from services.analytics_service import (
+from backend.services.gemini_service import ask_gemini
+from backend.services.analytics_service import (
     calculate_churn_score,
     classify_risk
 )

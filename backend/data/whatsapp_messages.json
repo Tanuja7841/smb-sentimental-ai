@@ -1,14 +1,25 @@
 [
   {
     "customer": "Rahul",
-    "message": "Your service has become very slow recently and nobody responds on time."
+    "channel": "WhatsApp",
+    "incident_type": "Support Delay",
+    "severity": "High",
+    "message": "Nobody responded to my issue."
   },
-  {
-    "customer": "Priya",
-    "message": "Thank you for the excellent support experience!"
-  },
+
   {
     "customer": "Arjun",
-    "message": "This is the worst support I have ever experienced. I need refund immediately."
+    "channel": "Email",
+    "incident_type": "Refund Request",
+    "severity": "Critical",
+    "message": "Refund my money immediately."
+  },
+
+  {
+    "customer": "Priya",
+    "channel": "Review",
+    "incident_type": "Positive Feedback",
+    "severity": "Low",
+    "message": "Amazing support experience!"
   }
 ]

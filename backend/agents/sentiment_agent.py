@@ -1,6 +1,6 @@
-from services.gemini_service import ask_gemini
+from backend.services.gemini_service import ask_gemini
 import json
-from services.memory_service import add_memory
+from backend.services.mongodb_memory_service import add_memory
 
 def analyze_message(message_data):
 
@@ -38,7 +38,7 @@ def analyze_message(message_data):
             event="Negative sentiment detected",
             severity="High"
         )
-        
+
     try:
 
         cleaned = result.strip()
