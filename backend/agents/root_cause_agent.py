@@ -1,11 +1,39 @@
-from backend.services.gemini_service import ask_gemini
+from services.gemini_service import ask_gemini
+from services.mongodb_memory_service import (
+    MongoDBMemoryService
+)
+
+memory = MongoDBMemoryService()
 
 
-def analyze_root_cause(customer, sentiment_result):
+def analyze_root_cause(
+    customer,
+    sentiment_result,
+    workflow_id=None,
+    customer_id=None
+):
+
+    context_text = ""
+
+    if workflow_id and customer_id:
+
+        context = memory.get_customer_context(
+            workflow_id,
+            customer_id
+        )
+
+        context_text = "\n".join([
+            f"Agent: {item['agent_name']}\nFinding: {item['finding']}"
+            for item in context
+        ])
 
     prompt = f"""
 
     You are an enterprise AI observability system.
+
+    Previous Agent Findings:
+
+    {context_text}
 
     Analyze this business situation.
 

@@ -1,6 +1,6 @@
 from backend.services.gemini_service import ask_gemini
 import json
-from backend.services.mongodb_memory_service import add_memory
+
 
 def analyze_message(message_data):
 
@@ -30,15 +30,6 @@ def analyze_message(message_data):
 
     result = ask_gemini(prompt)
 
-    if "Negative" in str(result):
-
-        add_memory(
-            agent="Sentiment Agent",
-            customer=message_data["customer"],
-            event="Negative sentiment detected",
-            severity="High"
-        )
-
     try:
 
         cleaned = result.strip()
@@ -47,7 +38,9 @@ def analyze_message(message_data):
             cleaned = cleaned.replace("```json", "")
             cleaned = cleaned.replace("```", "")
 
-        return json.loads(cleaned)
+        parsed_result = json.loads(cleaned)
+
+        return parsed_result
 
     except Exception as e:
 
@@ -55,4 +48,3 @@ def analyze_message(message_data):
             "error": str(e),
             "raw_response": result
         }
-    

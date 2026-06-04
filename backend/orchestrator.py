@@ -1,36 +1,57 @@
-from backend.agents.churn_agent import analyze_customer
-from backend.tools.sentiment_alert_tool import generate_sentiment_alert
-from backend.services.memory_service import add_memory
-from backend.agents.root_cause_agent import (
+import uuid
+from agents.churn_agent import analyze_customer
+from tools.sentiment_alert_tool import generate_sentiment_alert
+
+from services.mongodb_memory_service import (
+    MongoDBMemoryService
+)
+
+memory = MongoDBMemoryService()
+
+from agents.root_cause_agent import (
     analyze_root_cause
 )
-from backend.agents.recovery_agent import (
+from agents.recovery_agent import (
     generate_recovery_strategy
 )
 
-from backend.agents.executive_agent import (
+from agents.executive_agent import (
     generate_executive_brief
 )
 
-from backend.tools.email_tool import (
+from tools.email_tool import (
     send_recovery_email
 )
 
-from backend.tools.ticket_tool import (
+from tools.ticket_tool import (
     create_escalation_ticket
 )
 
-from backend.tools.crm_tool import (
+from tools.crm_tool import (
     create_followup_task
 )
 
-from backend.tools.notification_tool import (
+from tools.notification_tool import (
     notify_executive
 )
 
 def orchestrate_customer_issue(customer_data, sentiment_result):
 
     print("\n=========== ORCHESTRATION STARTED ===========\n")
+    workflow_id = f"wf_{uuid.uuid4()}"
+
+    print(f"Workflow Created: {workflow_id}")
+
+    memory.save_workflow(
+        workflow_id=workflow_id,
+        customer_id=customer_data["customer_id"]
+    )
+    memory.save_agent_memory(
+        workflow_id=workflow_id,
+        customer_id=customer_data["customer_id"],
+        agent_name="sentiment_agent",
+        finding=sentiment_result
+    )
 
     sentiment = sentiment_result.get("sentiment", "")
 
@@ -38,15 +59,15 @@ def orchestrate_customer_issue(customer_data, sentiment_result):
 
     # STEP 1 — Check escalation need
     negative_sentiments = [
-    "Negative",
-    "Extremely Negative",
-    "Very Negative"
+    "negative",
+    "extremely negative",
+    "very negative"
     ]
 
     high_urgencies = [
-        "High",
-        "Immediate",
-        "Critical"
+        "high",
+        "immediate",
+        "critical"
     ]
 
     sentiment = sentiment.lower()
@@ -56,32 +77,59 @@ def orchestrate_customer_issue(customer_data, sentiment_result):
         print("High-risk sentiment detected.")
 
         # STEP 2 — Run churn analysis
-        churn_result = analyze_customer(customer_data)
+        churn_result = analyze_customer(
+            customer_data,
+            workflow_id,
+            customer_data["customer_id"]
+        )
 
         print("\n=========== CHURN ANALYSIS ===========\n")
         print(churn_result)
 
+        memory.save_agent_memory(
+            workflow_id=workflow_id,
+            customer_id=customer_data["customer_id"],
+            agent_name="churn_agent",
+            finding=churn_result
+        )
+
         # ROOT CAUSE ANALYSIS
         root_cause = analyze_root_cause(
             customer_data,
-            sentiment_result
+            sentiment_result,
+            workflow_id,
+            customer_data["customer_id"]
         )
 
         print("\n=========== ROOT CAUSE ANALYSIS ===========\n")
         print(root_cause)
 
+        memory.save_agent_memory(
+            workflow_id=workflow_id,
+            customer_id=customer_data["customer_id"],
+            agent_name="root_cause_agent",
+            finding=root_cause
+        )
+
         # RECOVERY STRATEGY
 
         recovery_strategy = generate_recovery_strategy(
-
             customer_data,
             churn_result,
-            root_cause
+            root_cause,
+            workflow_id,
+            customer_data["customer_id"]
 
         )
 
         print("\n=========== RECOVERY STRATEGY ===========\n")
         print(recovery_strategy)
+        memory.save_agent_memory(
+            workflow_id=workflow_id,
+            customer_id=customer_data["customer_id"],
+            agent_name="recovery_agent",
+            finding=recovery_strategy
+        )
 
         # EXECUTIVE BRIEF
 
@@ -91,12 +139,20 @@ def orchestrate_customer_issue(customer_data, sentiment_result):
             sentiment_result,
             churn_result,
             root_cause,
-            recovery_strategy
+            recovery_strategy,
+            workflow_id,
+            customer_data["customer_id"]
 
         )
 
         print("\n=========== EXECUTIVE BRIEF ===========\n")
         print(executive_brief)
+        memory.save_agent_memory(
+            workflow_id=workflow_id,
+            customer_id=customer_data["customer_id"],
+            agent_name="executive_agent",
+            finding=executive_brief
+        )
 
         # AUTONOMOUS ACTIONS
 
@@ -129,16 +185,17 @@ def orchestrate_customer_issue(customer_data, sentiment_result):
         print(alert)
 
         # STEP 4 — Store orchestration memory
-        add_memory(
-            agent="Orchestrator",
-            customer=customer_data["name"],
-            event="Full escalation workflow triggered",
-            severity="Critical"
-        )
+        # add_memory(
+        #     agent="Orchestrator",
+        #     customer=customer_data["name"],
+        #     event="Full escalation workflow triggered",
+        #     severity="Critical"
+        # )
+
 
         return {
             "workflow": "Escalation Triggered",
-            "churn_analysis": churn_result,
+            "workflow_id": workflow_id,
             "root_cause": root_cause,
             "recovery_strategy": recovery_strategy,
             "executive_brief": executive_brief,
@@ -150,5 +207,6 @@ def orchestrate_customer_issue(customer_data, sentiment_result):
         }
 
     return {
-        "workflow": "No escalation required"
+        "workflow": "No escalation required",
+        "workflow_id": workflow_id
     }

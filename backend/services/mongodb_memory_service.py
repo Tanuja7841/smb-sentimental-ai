@@ -1,63 +1,106 @@
 from pymongo import MongoClient
 from dotenv import load_dotenv
+from datetime import datetime
+import certifi
 import os
-import certifi 
 
 load_dotenv()
 
-mongo_uri = os.getenv("MONGO_URI")
+class MongoDBMemoryService:
 
-client = MongoClient(
-        mongo_uri,
-        tlsCAFile=certifi.where(),
-        serverSelectionTimeoutMS=5000
-    )
+    def __init__(self):
 
-db = client["smb_sentinel"]
+        mongo_uri = os.getenv("MONGO_URI")
 
-memory_collection = db["agent_memory"]
-
-
-def add_memory(
-    agent,
-    customer,
-    event,
-    severity,
-    metadata=None
-):
-
-    memory_collection.insert_one({
-
-        "timestamp": datetime.utcnow(),
-
-        "agent": agent,
-
-        "customer": customer,
-
-        "event": event,
-
-        "severity": severity,
-
-        "metadata": metadata or {}
-
-    })
-
-
-def load_memory():
-
-    return list(
-        memory_collection.find(
-            {},
-            {"_id": 0}
+        self.client = MongoClient(
+            mongo_uri,
+            tlsCAFile=certifi.where(),
+            serverSelectionTimeoutMS=5000
         )
-    )
 
+        self.db = self.client["smb_sentinel"]
 
-def get_customer_memory(customer):
+        self.memory_collection = self.db["agent_memory"]
 
-    return list(
-        memory_collection.find(
-            {"customer": customer},
-            {"_id": 0}
+        self.workflow_collection = self.db["workflows"]
+
+    def save_workflow(
+        self,
+        workflow_id,
+        customer_id
+    ):
+
+        self.workflow_collection.insert_one({
+
+            "workflow_id": workflow_id,
+            "customer_id": customer_id,
+            "status": "active",
+            "created_at": datetime.utcnow()
+
+        })
+
+    def save_agent_memory(
+        self,
+        workflow_id,
+        customer_id,
+        agent_name,
+        finding
+    ):
+
+        self.memory_collection.insert_one({
+
+            "workflow_id": workflow_id,
+            "customer_id": customer_id,
+            "agent_name": agent_name,
+            "finding": finding,
+            "timestamp": datetime.utcnow()
+
+        })
+
+    def get_customer_context(
+        self,
+        workflow_id,
+        customer_id
+    ):
+
+        return list(
+
+            self.memory_collection.find(
+
+                {
+                    "workflow_id": workflow_id,
+                    "customer_id": customer_id
+                },
+
+                {"_id": 0}
+
+            ).sort("timestamp", 1)
+
         )
-    )
+    
+    def load_memory(self):
+        return list(
+            self.memory_collection.find(
+                {},
+                {"_id": 0}
+            )
+        )
+    
+    def get_customer_memory(
+        self,
+        customer_id
+    ):
+
+        return list(
+
+            self.memory_collection.find(
+
+                {
+                    "customer_id": customer_id
+                },
+
+                {"_id": 0}
+
+            )
+
+        )
