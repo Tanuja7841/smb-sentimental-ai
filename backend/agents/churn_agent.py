@@ -34,9 +34,17 @@ def analyze_customer(
             f"Agent: {item['agent_name']}\nFinding: {item['finding']}"
             for item in context
         ])
+    
+    profile = memory.get_customer_profile(
+        customer_id
+    )
 
     prompt = f"""
     You are an elite AI business operations agent.
+    
+    Customer Historical Profile:
+
+    {profile}
 
     Previous Agent Findings:
 

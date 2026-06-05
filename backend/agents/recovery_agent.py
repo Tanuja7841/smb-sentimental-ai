@@ -15,6 +15,17 @@ def generate_recovery_strategy(
     customer_id=None
 
 ):
+    tasks = []
+
+    if workflow_id:
+
+        tasks = memory.get_tasks_for_agent(
+            workflow_id,
+            "recovery_agent"
+        )
+
+    print("\n===== RECOVERY TASKS =====")
+    print(tasks)
 
     context_text = ""
 
@@ -29,10 +40,19 @@ def generate_recovery_strategy(
             f"Agent: {item['agent_name']}\nFinding: {item['finding']}"
             for item in context
         ])
-
+    
+    messages = memory.get_agent_messages(
+        workflow_id,
+        "recovery_agent"
+    )
+    
     prompt = f"""
 
     You are an AI customer recovery strategist.
+
+    Assigned Tasks:
+
+    {tasks}
 
     Previous Agent Findings:
 
@@ -47,6 +67,9 @@ def generate_recovery_strategy(
     Root Cause:
     {root_cause}
 
+    Agent Messages:
+    {messages}
+    
     Generate:
 
     1. Immediate recovery plan
@@ -58,4 +81,12 @@ def generate_recovery_strategy(
 
     """
 
-    return ask_gemini(prompt)
+    result = ask_gemini(prompt)
+
+    for task in tasks:
+
+        memory.complete_task(
+            task["_id"]
+        )
+
+    return result
