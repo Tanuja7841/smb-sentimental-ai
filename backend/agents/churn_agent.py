@@ -1,9 +1,10 @@
-from services.gemini_service import ask_gemini
-from services.analytics_service import (
+from backend import services as services
+from backend.services.gemini_service import ask_gemini
+from backend.services.analytics_service import (
     calculate_churn_score,
     classify_risk
 )
-from services.mongodb_memory_service import (
+from backend.services.mongodb_memory_service import (
     MongoDBMemoryService
 )
 
@@ -41,7 +42,7 @@ def analyze_customer(
 
     prompt = f"""
     You are an elite AI business operations agent.
-    
+
     Customer Historical Profile:
 
     {profile}
@@ -69,6 +70,8 @@ def analyze_customer(
     Keep response concise but executive-level.
     """
     ai_analysis = ask_gemini(prompt)
+    if ai_analysis is None:
+        ai_analysis = "Gemini unavailable."
 
     return {
         "customer": customer["name"],

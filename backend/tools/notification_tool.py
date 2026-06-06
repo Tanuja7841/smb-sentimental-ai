@@ -6,7 +6,7 @@ def notify_executive(customer, risk):
     HIGH PRIORITY CUSTOMER ALERT
 
     Customer:
-    {customer['customer_name']}
+    {customer.get('name', 'Customer')}
 
     Risk Level:
     {risk}

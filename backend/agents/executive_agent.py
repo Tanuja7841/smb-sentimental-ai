@@ -1,73 +1,113 @@
-from services.gemini_service import ask_gemini
-from services.mongodb_memory_service import (
-    MongoDBMemoryService
-)
-
-memory = MongoDBMemoryService()
+from backend.services.gemini_service import ask_gemini
+import json
 
 
-def generate_executive_brief(
-
+def executive_agent(
     customer,
-    sentiment,
-    churn,
-    root_cause,
-    recovery,
-    workflow_id=None,
-    customer_id=None
-
+    sentiment_result,
+    churn_result,
+    root_cause_result,
+    recovery_result
 ):
 
-    context_text = ""
-
-    if workflow_id and customer_id:
-
-        context = memory.get_customer_context(
-            workflow_id,
-            customer_id
-        )
-
-        context_text = "\n".join([
-            f"Agent: {item['agent_name']}\nFinding: {item['finding']}"
-            for item in context
-        ])
-
-    print("\n===== EXECUTIVE AGENT CONTEXT =====")
-    print(context_text)
-
     prompt = f"""
+You are a Chief Customer Officer (CCO).
 
-    You are a Chief AI Operations Officer.
+Create an executive summary for senior leadership.
 
-    Previous Agent Findings:
+Customer:
+{customer}
 
-    {context_text}
+Sentiment Analysis:
+{sentiment_result}
 
-    Customer:
-    {customer}
+Churn Analysis:
+{churn_result}
 
-    Sentiment:
-    {sentiment}
+Root Cause Analysis:
+{root_cause_result}
 
-    Churn:
-    {churn}
+Recovery Strategy:
+{recovery_result}
 
-    Root Cause:
-    {root_cause}
+Return ONLY valid JSON.
 
-    Recovery Strategy:
-    {recovery}
+{{
+    "customer": "",
+    "priority": "",
+    "overall_status": "",
+    "business_risk": "",
+    "revenue_at_risk": "",
+    "executive_summary": "",
+    "recommended_actions": [
+        "",
+        "",
+        ""
+    ],
+    "executive_owner": "",
+    "next_review": ""
+}}
 
-    Generate:
+Rules:
 
-    1. Executive Summary
-    2. Financial Risk
-    3. Operational Concern
-    4. Leadership Recommendation
-    5. Revenue Protection Plan
+- Do NOT return markdown.
+- Do NOT return explanations.
+- Do NOT wrap JSON inside ```json.
+- revenue_at_risk should come from customer["total_spent"].
+- priority must be one of:
+  Critical
+  High
+  Medium
+  Low
+"""
 
-    Keep the response executive-level and concise.
+    result = ask_gemini(prompt)
 
-    """
+    if result is None:
 
-    return ask_gemini(prompt)
+        return {
+            "customer": customer["name"],
+            "priority": "Critical",
+            "overall_status": "High Churn Risk",
+            "business_risk": "Customer churn",
+            "revenue_at_risk": customer["total_spent"],
+            "executive_summary": "Immediate executive intervention required.",
+            "recommended_actions": [
+                "Contact customer immediately",
+                "Assign account manager",
+                "Monitor recovery"
+            ],
+            "executive_owner": "VP Customer Success",
+            "next_review": "24 Hours"
+        }
+
+    try:
+
+        cleaned = result.strip()
+
+        if cleaned.startswith("```json"):
+            cleaned = cleaned.replace("```json", "")
+            cleaned = cleaned.replace("```", "")
+
+        return json.loads(cleaned)
+
+    except Exception as e:
+
+        print("Executive Agent JSON Error:", e)
+        print(result)
+
+        return {
+            "customer": customer["name"],
+            "priority": "Critical",
+            "overall_status": "High Churn Risk",
+            "business_risk": "Customer churn",
+            "revenue_at_risk": customer["total_spent"],
+            "executive_summary": "Immediate executive intervention required.",
+            "recommended_actions": [
+                "Contact customer immediately",
+                "Assign account manager",
+                "Monitor recovery"
+            ],
+            "executive_owner": "VP Customer Success",
+            "next_review": "24 Hours"
+        }

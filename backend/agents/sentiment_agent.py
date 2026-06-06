@@ -30,6 +30,16 @@ def analyze_message(message_data):
 
     result = ask_gemini(prompt)
 
+    if result is None:
+
+        return {
+            "sentiment": "negative",
+            "urgency": "high",
+            "frustration_level": "high",
+            "business_risk": "high",
+            "recommended_action": "Escalate immediately"
+        }
+
     try:
 
         cleaned = result.strip()

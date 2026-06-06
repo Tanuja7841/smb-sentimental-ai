@@ -144,27 +144,24 @@ class MongoDBMemoryService:
                     "workflow_id": workflow_id,
                     "assigned_agent": agent_name,
                     "status": "pending"
-                },
-                {"_id": 0}
+                }
             )
         )
     
     def complete_task(
-            self,
-            task_id
-        ):
+        self,
+        task_id
+    ):
 
-            self.task_collection.update_one(
-
-                {"_id": task_id},
-
-                {
-                    "$set": {
-                        "status": "completed"
-                    }
-                },
-        {"_id": 0}
-    )
+        self.task_collection.update_one(
+            {"_id": task_id},
+            {
+                "$set": {
+                    "status": "completed",
+                    "completed_at": datetime.utcnow()
+                }
+            }
+        )
 
     def get_workflows(self):
         return list(
@@ -231,20 +228,27 @@ class MongoDBMemoryService:
 
     def get_agent_messages(
         self,
-        workflow_id,
-        agent_name
+        workflow_id=None,
+        agent_name=None
     ):
+        query = {}
+
+        if workflow_id:
+            query["workflow_id"] = workflow_id
+
+        if agent_name:
+            query["from_agent"] = agent_name
 
         return list(
-
-            self.message_collection.find({
-
-                "workflow_id": workflow_id,
-                "to_agent": agent_name
-
-            })
-
+            self.message_collection.find(
+                query,
+                {"_id": 0}
+            ).sort(
+                "created_at",
+                1
+            )
         )
+
     def upsert_customer_profile(
         self,
         customer_id,
@@ -358,3 +362,22 @@ class MongoDBMemoryService:
                 }
 
             )
+    def get_all_customer_profiles(self):
+
+        return list(
+
+            self.customer_profile_collection.find(
+                {},
+                {"_id": 0}
+            )
+
+        )
+
+    def get_latest_executive_brief(self):
+
+        return self.memory_collection.find_one(
+            {
+                "agent_name": "executive_agent"
+            },
+            sort=[("timestamp", -1)]
+        )

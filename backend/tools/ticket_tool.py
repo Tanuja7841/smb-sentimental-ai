@@ -9,7 +9,7 @@ def create_escalation_ticket(customer, issue):
 
     print(f"""
     Ticket ID: {ticket_id}
-    Customer: {customer['customer_name']}
+    Customer: {customer.get('name', 'Customer')}
     Issue: {issue}
     Priority: Critical
     """)

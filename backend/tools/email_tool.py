@@ -1,26 +1,46 @@
 def send_recovery_email(customer, recovery_strategy):
+    plan = recovery_strategy.get(
 
+        "immediate_recovery_plan",
+
+        "Our team is reviewing your issue."
+
+    )
+
+    retention = recovery_strategy.get(
+
+        "retention_strategy",
+
+        ""
+
+    )
     print("\n=========== EMAIL TOOL ===========\n")
 
     email = f"""
 
-    TO: {customer['customer_name']}
+    TO:
+    {customer.get("name")}
 
-    SUBJECT: We're Sorry — Let's Fix This
+    SUBJECT:
+    We're Sorry — Let's Fix This
 
-    Dear {customer['customer_name']},
+    Dear {customer.get("name")},
 
-    We noticed your recent experience was not ideal.
+    We sincerely apologize for your recent experience.
 
-    Our AI operations team has reviewed the issue.
+    Immediate Recovery Plan
 
-    Recovery Plan:
-    {recovery_strategy}
+    {plan}
 
-    We value your business deeply.
+    Long-Term Commitment
+
+    {retention}
+
+    Thank you for giving us the opportunity to improve.
 
     Regards,
-    AI SMB Survival Team
+
+    AI Customer Success Team
 
     """
 
@@ -28,5 +48,5 @@ def send_recovery_email(customer, recovery_strategy):
 
     return {
         "status": "Email Sent",
-        "customer": customer["customer_name"]
+        "customer": customer.get("name", "Customer")
     }

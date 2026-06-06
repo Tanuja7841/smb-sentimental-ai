@@ -1,7 +1,7 @@
-from services.gemini_service import ask_gemini
-from services.mongodb_memory_service import (
-    MongoDBMemoryService
-)
+import json
+
+from backend.services.gemini_service import ask_gemini
+from backend.services.mongodb_memory_service import MongoDBMemoryService
 
 memory = MongoDBMemoryService()
 
@@ -22,45 +22,80 @@ def analyze_root_cause(
             customer_id
         )
 
-        context_text = "\n".join([
-            f"Agent: {item['agent_name']}\nFinding: {item['finding']}"
-            for item in context
-        ])
+        context_text = "\n\n".join(
+            [
+                f"Agent: {item.get('agent_name')}\nFinding: {item.get('finding')}"
+                for item in context
+            ]
+        )
 
     prompt = f"""
+You are an enterprise AI observability system.
 
-    You are an enterprise AI observability system.
+Previous Agent Findings:
+{context_text}
 
-    Previous Agent Findings:
+Customer:
+{customer}
 
-    {context_text}
+Sentiment Analysis:
+{sentiment_result}
 
-    Analyze this business situation.
+Identify:
 
-    Customer:
-    {customer}
+1. Root cause category
+2. Operational issue
+3. Business impact
+4. Severity
+5. Recommended fix
 
-    Sentiment Analysis:
-    {sentiment_result}
+Possible root causes:
+- Support Delay
+- Pricing Issue
+- Product Quality
+- Delivery Failure
+- Poor Engagement
+- Technical Problem
 
-    Identify:
+Return ONLY valid JSON.
 
-    1. Root cause category
-    2. Operational issue
-    3. Business impact
-    4. Severity
-    5. Recommended fix
+Example:
 
-    Possible root causes:
-    - Support Delay
-    - Pricing Issue
-    - Product Quality
-    - Delivery Failure
-    - Poor Engagement
-    - Technical Problem
+{{
+    "root_cause_category":"Support Delay",
+    "operational_issue":"Slow support response",
+    "business_impact":"Customer dissatisfaction",
+    "severity":"High",
+    "recommended_fix":"Assign senior support engineer"
+}}
+"""
 
-    Return response in JSON format.
+    result = ask_gemini(prompt)
 
-    """
+    if not result or result.startswith("Gemini Error"):
+        return {
+            "root_cause_category": "Unknown",
+            "operational_issue": "Gemini unavailable",
+            "business_impact": "Unknown",
+            "severity": "Unknown",
+            "recommended_fix": "Retry later"
+        }
 
-    return ask_gemini(prompt)
+    try:
+
+        cleaned = result.strip()
+
+        if cleaned.startswith("```json"):
+            cleaned = cleaned.replace("```json", "").replace("```", "").strip()
+
+        return json.loads(cleaned)
+
+    except Exception:
+
+        return {
+            "root_cause_category": "Unknown",
+            "operational_issue": result,
+            "business_impact": "Unknown",
+            "severity": "Unknown",
+            "recommended_fix": "Manual review required"
+        }
