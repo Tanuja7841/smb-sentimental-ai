@@ -1,353 +1,230 @@
+"""
+Orchestrator — Multi-Agent Workflow Engine
+
+Receives the MCP client from main.py and passes it to all agents.
+Every MongoDB operation flows through the MCP protocol.
+"""
+
 import uuid
-from backend.agents.churn_agent import analyze_customer
-from backend.tools.sentiment_alert_tool import generate_sentiment_alert
-from backend import agents as agents
-from backend.services.mongodb_memory_service import (
-    MongoDBMemoryService
-)
 import json
 
-memory = MongoDBMemoryService()
+from backend.agents.churn_agent import analyze_customer
+from backend.agents.supervisor_agent import decide_agents
+from backend.agents.root_cause_agent import analyze_root_cause
+from backend.agents.recovery_agent import generate_recovery_strategy
+from backend.agents.executive_agent import executive_agent
 
-from backend.agents.supervisor_agent import (
-    decide_agents
-)
+from backend.tools.sentiment_alert_tool import generate_sentiment_alert
+from backend.tools.email_tool import send_recovery_email
+from backend.tools.ticket_tool import create_escalation_ticket
+from backend.tools.crm_tool import create_followup_task
+from backend.tools.notification_tool import notify_executive
 
-from backend.agents.root_cause_agent import (
-    analyze_root_cause
-)
-from backend.agents.recovery_agent import (
-    generate_recovery_strategy
-)
 
-from backend.agents.executive_agent import (
-    executive_agent
-)
+def orchestrate_customer_issue(customer_data, sentiment_result, mcp):
+    """
+    Full multi-agent orchestration pipeline.
 
-from backend.tools.email_tool import (
-    send_recovery_email
-)
+    All MongoDB operations go through the MCP client (mcp).
+    The mcp client is passed to each agent for memory persistence.
 
-from backend.tools.ticket_tool import (
-    create_escalation_ticket
-)
+    Args:
+        customer_data: Customer profile dict
+        sentiment_result: Sentiment analysis from Gemini
+        mcp: MongoMCPClient instance (persistent session)
+    """
 
-from backend.tools.crm_tool import (
-    create_followup_task
-)
-
-from backend.tools.notification_tool import (
-    notify_executive
-)
-
-def orchestrate_customer_issue(customer_data, sentiment_result):
-
-    print("\n=========== ORCHESTRATION STARTED ===========\n")
     workflow_id = f"wf_{uuid.uuid4()}"
 
-    print(f"Workflow Created: {workflow_id}")
+    print(f"\n[MCP] Workflow Created: {workflow_id}")
 
-    memory.save_workflow(
+    # Save workflow via MCP
+    mcp.save_workflow(
         workflow_id=workflow_id,
         customer_id=customer_data["customer_id"]
     )
-    memory.save_agent_memory(
+
+    # Save sentiment finding via MCP
+    mcp.save_agent_memory(
         workflow_id=workflow_id,
         customer_id=customer_data["customer_id"],
         agent_name="sentiment_agent",
         finding=sentiment_result
     )
 
-    agent_plan = decide_agents(
-    customer_data,
-    sentiment_result
-    )
+    # SUPERVISOR: Decide which agents to run
+    agent_plan = decide_agents(customer_data, sentiment_result)
+    selected_agents = agent_plan.get("agents", [])
 
-    selected_agents = agent_plan.get(
-        "agents",
-        []
-    )
+    print(f"[MCP] Supervisor Selected: {selected_agents}")
 
-    print(
-        f"Supervisor Selected: {selected_agents}"
-    )
-
-    memory.save_supervisor_decision(
+    # Save supervisor decision via MCP
+    mcp.save_supervisor_decision(
         workflow_id=workflow_id,
         customer_id=customer_data["customer_id"],
         selected_agents=selected_agents
     )
-
-    print("="*50)
-    print("Selected Agents")
-    print(selected_agents)
-    print("="*50)
 
     churn_result = {}
     root_cause = {}
     recovery_strategy = {}
     executive_brief = {}
 
-    sentiment = sentiment_result.get("sentiment", "")
+    sentiment = str(sentiment_result.get("sentiment", "")).lower()
+    urgency = str(sentiment_result.get("urgency", "")).lower()
 
-    urgency = sentiment_result.get("urgency", "")
+    negative_sentiments = ["negative", "extremely negative", "very negative"]
+    high_urgencies = ["high", "immediate", "critical"]
 
-    # STEP 1 — Check escalation need
-    negative_sentiments = [
-    "negative",
-    "extremely negative",
-    "very negative"
-    ]
-
-    high_urgencies = [
-        "high",
-        "immediate",
-        "critical"
-    ]
-
-    sentiment = sentiment.lower()
-    urgency = urgency.lower()
     if sentiment in negative_sentiments or urgency in high_urgencies:
 
-        print("High-risk sentiment detected.")
-
-        # STEP 2 — Run churn analysis
+        # ─── CHURN AGENT ───
         if "churn_agent" in selected_agents:
 
             churn_result = analyze_customer(
-                customer_data,
-                workflow_id,
-                customer_data["customer_id"]
+                customer_data, mcp,
+                workflow_id, customer_data["customer_id"]
             )
 
-            memory.upsert_customer_profile(
-
+            mcp.upsert_customer_profile(
                 customer_id=customer_data["customer_id"],
-
                 customer_name=customer_data["name"],
-
-                churn_score=churn_result["churn_score"],
-
-                risk_level=churn_result["risk_level"]
-
+                churn_score=churn_result.get("churn_score", 0),
+                risk_level=churn_result.get("risk_level", "")
             )
 
-            memory.save_agent_memory(
+            mcp.save_agent_memory(
                 workflow_id=workflow_id,
                 customer_id=customer_data["customer_id"],
                 agent_name="churn_agent",
                 finding=churn_result
             )
 
-        print("\n=========== CHURN ANALYSIS ===========\n")
-        print(churn_result)
+            print(f"[MCP] Churn Agent → Score: {churn_result.get('churn_score')}, Risk: {churn_result.get('risk_level')}")
 
-        print("="*50)
-        print("Churn Agent Finished")
-        print("="*50)
-
-        # ROOT CAUSE ANALYSIS
+        # ─── ROOT CAUSE AGENT ───
         if "root_cause_agent" in selected_agents:
 
             root_cause = analyze_root_cause(
-                customer_data,
-                sentiment_result,
-                workflow_id,
-                customer_data["customer_id"]
+                customer_data, sentiment_result, mcp,
+                workflow_id, customer_data["customer_id"]
             )
 
-            memory.send_agent_message(
+            # Inter-agent message via MCP
+            mcp.send_agent_message(
                 workflow_id=workflow_id,
                 from_agent="root_cause_agent",
                 to_agent="recovery_agent",
                 message=json.dumps(root_cause, indent=2)
             )
 
-            memory.save_agent_memory(
+            mcp.save_agent_memory(
                 workflow_id=workflow_id,
                 customer_id=customer_data["customer_id"],
                 agent_name="root_cause_agent",
                 finding=root_cause
             )
 
-        print("\n=========== ROOT CAUSE ANALYSIS ===========\n")
-        print(root_cause)
+            print(f"[MCP] Root Cause Agent → {root_cause.get('root_cause_category', 'Unknown')}")
 
-        print("="*50)
-        print("Root Cause Finished")
-        print("="*50)
-
-        memory.create_task(
+        # Create recovery task via MCP
+        mcp.create_task(
             workflow_id=workflow_id,
             assigned_agent="recovery_agent",
             task_type="customer_recovery",
             task_details=root_cause
         )
 
-        print("Recovery task created.")
-
-        # RECOVERY STRATEGY
-
+        # ─── RECOVERY AGENT ───
         if "recovery_agent" in selected_agents:
 
             recovery_strategy = generate_recovery_strategy(
-                customer_data,
-                churn_result,
-                root_cause,
-                workflow_id,
-                customer_data["customer_id"]
+                customer_data, churn_result, root_cause, mcp,
+                workflow_id, customer_data["customer_id"]
             )
 
-            memory.save_agent_memory(
+            mcp.save_agent_memory(
                 workflow_id=workflow_id,
                 customer_id=customer_data["customer_id"],
                 agent_name="recovery_agent",
                 finding=recovery_strategy
             )
 
-            tasks = memory.get_tasks_for_agent(
-                workflow_id,
-                "recovery_agent"
-            )
-
-            for task in tasks:
-
-                memory.complete_task(
-                    task["_id"]
-                )
-
-            memory.send_agent_message(
+            # Inter-agent message via MCP
+            mcp.send_agent_message(
                 workflow_id=workflow_id,
                 from_agent="recovery_agent",
                 to_agent="executive_agent",
                 message=json.dumps(recovery_strategy, indent=2)
             )
-                        
 
-        print("\n=========== RECOVERY STRATEGY ===========\n")
-        print(recovery_strategy)
+            print(f"[MCP] Recovery Agent → Plan generated")
 
-        print("="*50)
-        print("Recovery Finished")
-        print("="*50)
-
-        # EXECUTIVE BRIEF
-
+        # ─── EXECUTIVE AGENT ───
         if "executive_agent" in selected_agents:
 
             executive_brief = executive_agent(
-                customer_data,
-                sentiment_result,
-                churn_result,
-                root_cause,
-                recovery_strategy
+                customer_data, sentiment_result,
+                churn_result, root_cause, recovery_strategy
             )
 
-            memory.save_agent_memory(
+            mcp.save_agent_memory(
                 workflow_id=workflow_id,
                 customer_id=customer_data["customer_id"],
                 agent_name="executive_agent",
                 finding=executive_brief
             )
 
-            print("\n=========== EXECUTIVE BRIEF ===========\n")
-            print(executive_brief)
+            print(f"[MCP] Executive Agent → Priority: {executive_brief.get('priority', 'N/A')}")
 
-            print("="*50)
-            print("Executive Finished")
-            print("="*50)
+        # ─── AUTONOMOUS ACTIONS ───
+        email_result = send_recovery_email(customer_data, recovery_strategy) if recovery_strategy else None
 
-        else:
+        ticket_result = create_escalation_ticket(
+            customer_data,
+            root_cause.get("root_cause_category", "Negative sentiment")
+        ) if root_cause else None
 
-            executive_brief = None
+        crm_result = create_followup_task(customer_data)
 
-        # AUTONOMOUS ACTIONS
+        executive_alert = notify_executive(
+            customer_data, churn_result.get("risk_level", "Unknown")
+        ) if executive_brief else None
 
-        email_result = None
-        ticket_result = None
-        crm_result = None
-        executive_alert = None
-
-        if recovery_strategy:
-
-            email_result = send_recovery_email(
-                customer_data,
-                recovery_strategy
-            )
-
-        if root_cause:
-
-            ticket_result = create_escalation_ticket(
-                customer_data,
-                root_cause.get(
-                    "root_cause_category",
-                    "Negative sentiment escalation"
-                )
-            )
-
-        crm_result = create_followup_task(
-            customer_data
-        )
-
-        memory.save_agent_memory(
+        # Save autonomous actions via MCP
+        mcp.save_agent_memory(
             workflow_id=workflow_id,
             customer_id=customer_data["customer_id"],
             agent_name="autonomous_actions",
             finding={
                 "email": email_result,
                 "ticket": ticket_result,
-                "crm": crm_result
+                "crm": crm_result,
+                "executive_alert": executive_alert
             }
         )
 
-        risk_level = churn_result.get(
-            "risk_level",
-            "Unknown"
-        )
+        # Complete workflow via MCP
+        mcp.complete_workflow(workflow_id)
 
-        if executive_brief:
-
-            executive_alert = notify_executive(
-                customer_data,
-                risk_level
-            )
-
-        # STEP 3 — Generate operational alert
-        alert = generate_sentiment_alert(
-            customer_data["name"],
-            "High"
-        )
-
-        print("\n=========== ALERT ===========\n")
-        print(alert)
-
-        memory.complete_workflow(
-            workflow_id
-        )
-
-        # STEP 4 — Store orchestration memory
-        # add_memory(
-        #     agent="Orchestrator",
-        #     customer=customer_data["name"],
-        #     event="Full escalation workflow triggered",
-        #     severity="Critical"
-        # )
-
+        print(f"[MCP] Workflow {workflow_id} COMPLETED ✓")
 
         return {
-            "workflow": "Escalation Triggered",
             "workflow_id": workflow_id,
-            "root_cause": root_cause,
-            "recovery_strategy": recovery_strategy,
-            "executive_brief": executive_brief,
-            "email_result": email_result,
-            "ticket_result": ticket_result,
-            "crm_result": crm_result,
-            "executive_alert": executive_alert,
-            "alert": alert
+            "status": "escalation_triggered",
+            "agents_executed": selected_agents,
+            "churn_score": churn_result.get("churn_score"),
+            "risk_level": churn_result.get("risk_level"),
+            "root_cause": root_cause.get("root_cause_category"),
+            "recovery_plan": recovery_strategy.get("immediate_recovery_plan") if isinstance(recovery_strategy, dict) else None,
+            "executive_priority": executive_brief.get("priority") if isinstance(executive_brief, dict) else None
         }
 
+    # Low-risk: no escalation needed
+    mcp.complete_workflow(workflow_id)
+
     return {
-        "workflow": "No escalation required",
-        "workflow_id": workflow_id
+        "workflow_id": workflow_id,
+        "status": "no_escalation",
+        "agents_executed": selected_agents
     }
