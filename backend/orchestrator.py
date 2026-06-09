@@ -86,13 +86,6 @@ def orchestrate_customer_issue(customer_data, sentiment_result, mcp):
                 workflow_id, customer_data["customer_id"]
             )
 
-            mcp.upsert_customer_profile(
-                customer_id=customer_data["customer_id"],
-                customer_name=customer_data["name"],
-                churn_score=churn_result.get("churn_score", 0),
-                risk_level=churn_result.get("risk_level", "")
-            )
-
             mcp.save_agent_memory(
                 workflow_id=workflow_id,
                 customer_id=customer_data["customer_id"],
@@ -126,6 +119,15 @@ def orchestrate_customer_issue(customer_data, sentiment_result, mcp):
             )
 
             print(f"[MCP] Root Cause Agent → {root_cause.get('root_cause_category', 'Unknown')}")
+
+        # Update customer profile with churn + root cause data via MCP
+        mcp.upsert_customer_profile(
+            customer_id=customer_data["customer_id"],
+            customer_name=customer_data["name"],
+            churn_score=churn_result.get("churn_score", 0),
+            risk_level=churn_result.get("risk_level", ""),
+            root_cause=root_cause.get("root_cause_category", "")
+        )
 
         # Create recovery task via MCP
         mcp.create_task(
@@ -207,7 +209,7 @@ def orchestrate_customer_issue(customer_data, sentiment_result, mcp):
         # Complete workflow via MCP
         mcp.complete_workflow(workflow_id)
 
-        print(f"[MCP] Workflow {workflow_id} COMPLETED ✓")
+        print(f"[MCP] Workflow {workflow_id} COMPLETED")
 
         return {
             "workflow_id": workflow_id,
@@ -220,7 +222,14 @@ def orchestrate_customer_issue(customer_data, sentiment_result, mcp):
             "executive_priority": executive_brief.get("priority") if isinstance(executive_brief, dict) else None
         }
 
-    # Low-risk: no escalation needed
+    # Low-risk: save profile and complete
+    mcp.upsert_customer_profile(
+        customer_id=customer_data["customer_id"],
+        customer_name=customer_data["name"],
+        churn_score=0,
+        risk_level="Low"
+    )
+
     mcp.complete_workflow(workflow_id)
 
     return {

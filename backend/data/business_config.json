@@ -1,0 +1,26 @@
+{
+  "businesses": [
+    {
+      "id": "salon_001",
+      "file": "salon.json",
+      "name": "Glow Beauty Studio",
+      "owner": "Priya Nair",
+      "username": "priya"
+    },
+    {
+      "id": "cafe_001",
+      "file": "cafe.json",
+      "name": "Brew Culture Cafe",
+      "owner": "Arjun Patel",
+      "username": "arjun"
+    },
+    {
+      "id": "elec_001",
+      "file": "electronics.json",
+      "name": "Sharma Electronics",
+      "owner": "Rahul Sharma",
+      "username": "rahul"
+    }
+  ],
+  "demo_password": "demo123"
+}

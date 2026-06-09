@@ -370,7 +370,7 @@ class MongoMCPClient:
 
     def get_workflows(self):
         """Get all workflows."""
-        return self._find_documents("workflows", sort={"created_at": -1})
+        return self._find_documents("workflows", sort={"created_at": -1}, limit=100)
 
     def save_agent_memory(
         self,
@@ -410,7 +410,7 @@ class MongoMCPClient:
 
     def load_memory(self):
         """Load all agent memory records."""
-        return self._find_documents("agent_memory")
+        return self._find_documents("agent_memory", limit=100)
 
     def save_supervisor_decision(
         self,
@@ -487,7 +487,7 @@ class MongoMCPClient:
 
     def get_agent_tasks(self):
         """Get all agent tasks."""
-        return self._find_documents("agent_tasks", sort={"created_at": -1})
+        return self._find_documents("agent_tasks", sort={"created_at": -1}, limit=100)
 
     def send_agent_message(
         self,
@@ -520,7 +520,8 @@ class MongoMCPClient:
         return self._find_documents(
             "agent_messages",
             filter=query,
-            sort={"created_at": 1}
+            sort={"created_at": 1},
+            limit=100
         )
 
     def upsert_customer_profile(
@@ -567,7 +568,7 @@ class MongoMCPClient:
 
     def get_all_customer_profiles(self):
         """Get all customer profiles."""
-        return self._find_documents("customer_profiles")
+        return self._find_documents("customer_profiles", limit=100)
 
     def get_workflow_timeline(self, workflow_id: str):
         """Get the full timeline of agent actions in a workflow."""

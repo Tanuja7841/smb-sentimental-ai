@@ -1,0 +1,193 @@
+{
+  "business_id": "cafe_001",
+  "business_name": "Brew Culture Cafe",
+  "owner": "Arjun Patel",
+  "industry": "Food & Beverage",
+  "login": {
+    "username": "arjun",
+    "password": "demo123"
+  },
+  "logo_letter": "B",
+  "color": "#795548",
+  "tagline": "Artisan coffee & comfort food",
+  "location": "Indiranagar, Bangalore",
+  "channels": [
+    "Zomato Reviews",
+    "WhatsApp Business",
+    "Google Reviews"
+  ],
+  "customers": [
+    {
+      "customer_id": "BC-001",
+      "name": "Aditya Menon",
+      "visits": 45,
+      "last_visit_days": 2,
+      "avg_spend": 450,
+      "total_spent": 20250,
+      "preferred_item": "Cold Brew",
+      "sentiment": "positive",
+      "response_delay_days": 1
+    },
+    {
+      "customer_id": "BC-002",
+      "name": "Neha Saxena",
+      "visits": 30,
+      "last_visit_days": 20,
+      "avg_spend": 600,
+      "total_spent": 18000,
+      "preferred_item": "Avocado Toast",
+      "sentiment": "negative",
+      "response_delay_days": 14
+    },
+    {
+      "customer_id": "BC-003",
+      "name": "Rohit Kapoor",
+      "visits": 60,
+      "last_visit_days": 1,
+      "avg_spend": 350,
+      "total_spent": 21000,
+      "preferred_item": "Espresso",
+      "sentiment": "positive",
+      "response_delay_days": 1
+    },
+    {
+      "customer_id": "BC-004",
+      "name": "Simran Kaur",
+      "visits": 12,
+      "last_visit_days": 40,
+      "avg_spend": 800,
+      "total_spent": 9600,
+      "preferred_item": "Pasta",
+      "sentiment": "negative",
+      "response_delay_days": 18
+    },
+    {
+      "customer_id": "BC-005",
+      "name": "Vikash Dubey",
+      "visits": 25,
+      "last_visit_days": 5,
+      "avg_spend": 500,
+      "total_spent": 12500,
+      "preferred_item": "Latte",
+      "sentiment": "positive",
+      "response_delay_days": 2
+    },
+    {
+      "customer_id": "BC-006",
+      "name": "Tanya Bose",
+      "visits": 8,
+      "last_visit_days": 55,
+      "avg_spend": 700,
+      "total_spent": 5600,
+      "preferred_item": "Brunch Platter",
+      "sentiment": "negative",
+      "response_delay_days": 22
+    },
+    {
+      "customer_id": "BC-007",
+      "name": "Manish Tiwari",
+      "visits": 35,
+      "last_visit_days": 3,
+      "avg_spend": 400,
+      "total_spent": 14000,
+      "preferred_item": "Cappuccino",
+      "sentiment": "positive",
+      "response_delay_days": 1
+    },
+    {
+      "customer_id": "BC-008",
+      "name": "Isha Malhotra",
+      "visits": 5,
+      "last_visit_days": 70,
+      "avg_spend": 550,
+      "total_spent": 2750,
+      "preferred_item": "Sandwich",
+      "sentiment": "negative",
+      "response_delay_days": 30
+    },
+    {
+      "customer_id": "BC-009",
+      "name": "Kunal Shah",
+      "visits": 40,
+      "last_visit_days": 4,
+      "avg_spend": 380,
+      "total_spent": 15200,
+      "preferred_item": "Filter Coffee",
+      "sentiment": "positive",
+      "response_delay_days": 1
+    },
+    {
+      "customer_id": "BC-010",
+      "name": "Prerna Joshi",
+      "visits": 15,
+      "last_visit_days": 10,
+      "avg_spend": 650,
+      "total_spent": 9750,
+      "preferred_item": "Cheesecake",
+      "sentiment": "neutral",
+      "response_delay_days": 4
+    }
+  ],
+  "messages": [
+    {
+      "customer": "Aditya Menon",
+      "channel": "Google Review",
+      "message": "Best cold brew in Bangalore. Consistent quality every time. My daily ritual.",
+      "severity": "Low"
+    },
+    {
+      "customer": "Neha Saxena",
+      "channel": "Zomato Review",
+      "message": "Found a hair in my avocado toast. Staff didn't even apologize properly. Hygiene standards slipping.",
+      "severity": "Critical"
+    },
+    {
+      "customer": "Rohit Kapoor",
+      "channel": "Google Review",
+      "message": "60 visits and counting! The baristas know my order by heart. This is my second office.",
+      "severity": "Low"
+    },
+    {
+      "customer": "Simran Kaur",
+      "channel": "WhatsApp Business",
+      "message": "Ordered pasta delivery \u2014 arrived cold and soggy after 1 hour. App showed 25 mins. Very disappointing.",
+      "severity": "High"
+    },
+    {
+      "customer": "Vikash Dubey",
+      "channel": "Google Review",
+      "message": "The new seasonal latte is incredible. Love the menu innovation. Great wifi too.",
+      "severity": "Low"
+    },
+    {
+      "customer": "Tanya Bose",
+      "channel": "Zomato Review",
+      "message": "Brunch overpriced for tiny portions. \u20b9800 for what barely fills you up. Won't return.",
+      "severity": "High"
+    },
+    {
+      "customer": "Manish Tiwari",
+      "channel": "WhatsApp Business",
+      "message": "Quick question \u2014 do you still have weekend live music? Planning to bring friends Saturday.",
+      "severity": "Low"
+    },
+    {
+      "customer": "Isha Malhotra",
+      "channel": "Zomato Review",
+      "message": "AC wasn't working, waited 30 mins for sandwich, got wrong order. One star.",
+      "severity": "Critical"
+    },
+    {
+      "customer": "Kunal Shah",
+      "channel": "Google Review",
+      "message": "Filter coffee here reminds me of home. Perfect South Indian style. Staff is always warm.",
+      "severity": "Low"
+    },
+    {
+      "customer": "Prerna Joshi",
+      "channel": "WhatsApp Business",
+      "message": "Cheesecake portion reduced but same price. Mentioning because I've been regular for months.",
+      "severity": "Medium"
+    }
+  ]
+}

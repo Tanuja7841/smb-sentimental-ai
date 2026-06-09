@@ -1,0 +1,193 @@
+{
+  "business_id": "salon_001",
+  "business_name": "Glow Beauty Studio",
+  "owner": "Priya Nair",
+  "industry": "Salon & Wellness",
+  "login": {
+    "username": "priya",
+    "password": "demo123"
+  },
+  "logo_letter": "G",
+  "color": "#E91E63",
+  "tagline": "Premium beauty & wellness services",
+  "location": "Koramangala, Bangalore",
+  "channels": [
+    "WhatsApp Business",
+    "Google Reviews",
+    "Instagram DM"
+  ],
+  "customers": [
+    {
+      "customer_id": "GS-001",
+      "name": "Ananya Mehta",
+      "visits": 12,
+      "last_visit_days": 5,
+      "avg_spend": 2500,
+      "total_spent": 30000,
+      "preferred_service": "Hair Color",
+      "sentiment": "positive",
+      "response_delay_days": 1
+    },
+    {
+      "customer_id": "GS-002",
+      "name": "Ritu Sharma",
+      "visits": 8,
+      "last_visit_days": 45,
+      "avg_spend": 1800,
+      "total_spent": 14400,
+      "preferred_service": "Facial",
+      "sentiment": "negative",
+      "response_delay_days": 15
+    },
+    {
+      "customer_id": "GS-003",
+      "name": "Kavya Rao",
+      "visits": 20,
+      "last_visit_days": 3,
+      "avg_spend": 3500,
+      "total_spent": 70000,
+      "preferred_service": "Bridal Package",
+      "sentiment": "positive",
+      "response_delay_days": 1
+    },
+    {
+      "customer_id": "GS-004",
+      "name": "Nisha Gupta",
+      "visits": 5,
+      "last_visit_days": 60,
+      "avg_spend": 1200,
+      "total_spent": 6000,
+      "preferred_service": "Haircut",
+      "sentiment": "negative",
+      "response_delay_days": 20
+    },
+    {
+      "customer_id": "GS-005",
+      "name": "Shreya Iyer",
+      "visits": 15,
+      "last_visit_days": 7,
+      "avg_spend": 2800,
+      "total_spent": 42000,
+      "preferred_service": "Spa",
+      "sentiment": "positive",
+      "response_delay_days": 2
+    },
+    {
+      "customer_id": "GS-006",
+      "name": "Megha Patel",
+      "visits": 3,
+      "last_visit_days": 90,
+      "avg_spend": 1500,
+      "total_spent": 4500,
+      "preferred_service": "Manicure",
+      "sentiment": "negative",
+      "response_delay_days": 25
+    },
+    {
+      "customer_id": "GS-007",
+      "name": "Pooja Reddy",
+      "visits": 10,
+      "last_visit_days": 14,
+      "avg_spend": 2200,
+      "total_spent": 22000,
+      "preferred_service": "Hair Treatment",
+      "sentiment": "neutral",
+      "response_delay_days": 5
+    },
+    {
+      "customer_id": "GS-008",
+      "name": "Swati Kulkarni",
+      "visits": 18,
+      "last_visit_days": 2,
+      "avg_spend": 4000,
+      "total_spent": 72000,
+      "preferred_service": "Full Body Spa",
+      "sentiment": "positive",
+      "response_delay_days": 1
+    },
+    {
+      "customer_id": "GS-009",
+      "name": "Deepika Jain",
+      "visits": 6,
+      "last_visit_days": 35,
+      "avg_spend": 1600,
+      "total_spent": 9600,
+      "preferred_service": "Threading",
+      "sentiment": "negative",
+      "response_delay_days": 12
+    },
+    {
+      "customer_id": "GS-010",
+      "name": "Lavanya Nair",
+      "visits": 22,
+      "last_visit_days": 4,
+      "avg_spend": 3000,
+      "total_spent": 66000,
+      "preferred_service": "Keratin",
+      "sentiment": "positive",
+      "response_delay_days": 1
+    }
+  ],
+  "messages": [
+    {
+      "customer": "Ananya Mehta",
+      "channel": "Google Review",
+      "message": "Love the new keratin treatment! My hair feels amazing. Priya's team is always so professional.",
+      "severity": "Low"
+    },
+    {
+      "customer": "Ritu Sharma",
+      "channel": "WhatsApp Business",
+      "message": "I waited 40 minutes past my appointment time. The stylist was rude when I complained. Very disappointed.",
+      "severity": "High"
+    },
+    {
+      "customer": "Kavya Rao",
+      "channel": "Instagram DM",
+      "message": "My bridal trial was perfect! Can't wait for the big day. Booking the full package for my bridesmaids too.",
+      "severity": "Low"
+    },
+    {
+      "customer": "Nisha Gupta",
+      "channel": "WhatsApp Business",
+      "message": "The haircut was uneven and I had to go to another salon to fix it. Still no response to my complaint from 3 weeks ago.",
+      "severity": "Critical"
+    },
+    {
+      "customer": "Shreya Iyer",
+      "channel": "Google Review",
+      "message": "The aromatherapy spa is heavenly. Best stress relief after work. The staff remembers my preferences every time.",
+      "severity": "Low"
+    },
+    {
+      "customer": "Megha Patel",
+      "channel": "WhatsApp Business",
+      "message": "Booked online but when I arrived they said no slots available. Waste of my time. Never coming back.",
+      "severity": "Critical"
+    },
+    {
+      "customer": "Pooja Reddy",
+      "channel": "WhatsApp Business",
+      "message": "Hair treatment was okay but the price seems higher than last time. Can you check? No advance intimation of price change.",
+      "severity": "Medium"
+    },
+    {
+      "customer": "Swati Kulkarni",
+      "channel": "Google Review",
+      "message": "18 visits and still love it every time. The loyalty points system is great \u2014 got a free facial last month!",
+      "severity": "Low"
+    },
+    {
+      "customer": "Deepika Jain",
+      "channel": "WhatsApp Business",
+      "message": "The threading left red marks on my face for 2 days. Used to be better before. Quality has gone down.",
+      "severity": "High"
+    },
+    {
+      "customer": "Lavanya Nair",
+      "channel": "Instagram DM",
+      "message": "Just got my keratin done \u2014 obsessed with the results! Will definitely recommend to all my friends.",
+      "severity": "Low"
+    }
+  ]
+}

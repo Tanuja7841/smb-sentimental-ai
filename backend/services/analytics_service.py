@@ -2,18 +2,19 @@ def calculate_churn_score(customer):
 
     score = 0
 
-    # Purchase inactivity
-    if customer["last_purchase_days"] > 40:
+    # Purchase/visit inactivity (supports both old and new data formats)
+    inactivity = customer.get("last_purchase_days", customer.get("last_visit_days", 0))
+    if inactivity > 40:
         score += 40
-    elif customer["last_purchase_days"] > 20:
+    elif inactivity > 20:
         score += 20
 
     # Sentiment
-    if customer["sentiment"] == "negative":
+    if customer.get("sentiment") == "negative":
         score += 35
 
     # Response delay
-    if customer["response_delay_days"] > 10:
+    if customer.get("response_delay_days", 0) > 10:
         score += 25
 
     return min(score, 100)
@@ -31,7 +32,7 @@ def classify_risk(score):
 
 def business_priority(customer, churn_score):
 
-    if customer["total_spent"] > 30000 and churn_score > 50:
+    if customer.get("total_spent", 0) > 30000 and churn_score > 50:
         return "Critical"
 
     elif churn_score > 70:

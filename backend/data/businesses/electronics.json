@@ -1,0 +1,193 @@
+{
+  "business_id": "elec_001",
+  "business_name": "Sharma Electronics",
+  "owner": "Rahul Sharma",
+  "industry": "Electronics Retail",
+  "login": {
+    "username": "rahul",
+    "password": "demo123"
+  },
+  "logo_letter": "S",
+  "color": "#1565C0",
+  "tagline": "Trusted electronics since 2015",
+  "location": "MG Road, Pune",
+  "channels": [
+    "WhatsApp Business",
+    "Google Reviews",
+    "JustDial"
+  ],
+  "customers": [
+    {
+      "customer_id": "SE-001",
+      "name": "Amit Deshmukh",
+      "visits": 8,
+      "last_visit_days": 10,
+      "avg_spend": 15000,
+      "total_spent": 120000,
+      "last_purchase": "iPhone 15",
+      "sentiment": "positive",
+      "response_delay_days": 2
+    },
+    {
+      "customer_id": "SE-002",
+      "name": "Sunil Patil",
+      "visits": 3,
+      "last_visit_days": 45,
+      "avg_spend": 25000,
+      "total_spent": 75000,
+      "last_purchase": "Samsung TV 55\"",
+      "sentiment": "negative",
+      "response_delay_days": 18
+    },
+    {
+      "customer_id": "SE-003",
+      "name": "Rekha Joshi",
+      "visits": 12,
+      "last_visit_days": 7,
+      "avg_spend": 5000,
+      "total_spent": 60000,
+      "last_purchase": "AirPods Pro",
+      "sentiment": "positive",
+      "response_delay_days": 1
+    },
+    {
+      "customer_id": "SE-004",
+      "name": "Manoj Kulkarni",
+      "visits": 2,
+      "last_visit_days": 60,
+      "avg_spend": 45000,
+      "total_spent": 90000,
+      "last_purchase": "MacBook Air",
+      "sentiment": "negative",
+      "response_delay_days": 25
+    },
+    {
+      "customer_id": "SE-005",
+      "name": "Prashant Wagh",
+      "visits": 6,
+      "last_visit_days": 14,
+      "avg_spend": 8000,
+      "total_spent": 48000,
+      "last_purchase": "JBL Speaker",
+      "sentiment": "positive",
+      "response_delay_days": 3
+    },
+    {
+      "customer_id": "SE-006",
+      "name": "Sunita Deshpande",
+      "visits": 4,
+      "last_visit_days": 30,
+      "avg_spend": 12000,
+      "total_spent": 48000,
+      "last_purchase": "Washing Machine",
+      "sentiment": "negative",
+      "response_delay_days": 15
+    },
+    {
+      "customer_id": "SE-007",
+      "name": "Ganesh Bhosale",
+      "visits": 10,
+      "last_visit_days": 5,
+      "avg_spend": 3000,
+      "total_spent": 30000,
+      "last_purchase": "Phone Case",
+      "sentiment": "positive",
+      "response_delay_days": 1
+    },
+    {
+      "customer_id": "SE-008",
+      "name": "Vaishali Pawar",
+      "visits": 1,
+      "last_visit_days": 75,
+      "avg_spend": 55000,
+      "total_spent": 55000,
+      "last_purchase": "LG Refrigerator",
+      "sentiment": "negative",
+      "response_delay_days": 30
+    },
+    {
+      "customer_id": "SE-009",
+      "name": "Sachin More",
+      "visits": 7,
+      "last_visit_days": 12,
+      "avg_spend": 6000,
+      "total_spent": 42000,
+      "last_purchase": "Mi Watch",
+      "sentiment": "neutral",
+      "response_delay_days": 5
+    },
+    {
+      "customer_id": "SE-010",
+      "name": "Anjali Kale",
+      "visits": 15,
+      "last_visit_days": 3,
+      "avg_spend": 4000,
+      "total_spent": 60000,
+      "last_purchase": "Charging Cable",
+      "sentiment": "positive",
+      "response_delay_days": 1
+    }
+  ],
+  "messages": [
+    {
+      "customer": "Amit Deshmukh",
+      "channel": "Google Review",
+      "message": "Bought iPhone 15 \u2014 best price in Pune. They set up everything. Genuine products with bill.",
+      "severity": "Low"
+    },
+    {
+      "customer": "Sunil Patil",
+      "channel": "WhatsApp Business",
+      "message": "Samsung TV has dead pixel after 2 months. Called 5 times for warranty, nobody came. Very frustrated.",
+      "severity": "High"
+    },
+    {
+      "customer": "Rekha Joshi",
+      "channel": "Google Review",
+      "message": "Always buy accessories here. Good collection, fair prices, and honest advice from Rahul bhai.",
+      "severity": "Low"
+    },
+    {
+      "customer": "Manoj Kulkarni",
+      "channel": "WhatsApp Business",
+      "message": "MacBook keyboard stopped in 3 weeks. Store says Apple warranty, Apple says go to store. Want refund.",
+      "severity": "Critical"
+    },
+    {
+      "customer": "Prashant Wagh",
+      "channel": "Google Review",
+      "message": "Great JBL collection. Got demo of 4 speakers before buying. Staff is knowledgeable, not pushy.",
+      "severity": "Low"
+    },
+    {
+      "customer": "Sunita Deshpande",
+      "channel": "WhatsApp Business",
+      "message": "Washing machine installation delayed 10 days. Had to wash clothes by hand. Unacceptable.",
+      "severity": "High"
+    },
+    {
+      "customer": "Ganesh Bhosale",
+      "channel": "JustDial",
+      "message": "My go-to electronics store. 10 purchases, never an issue. Always genuine products.",
+      "severity": "Low"
+    },
+    {
+      "customer": "Vaishali Pawar",
+      "channel": "WhatsApp Business",
+      "message": "LG refrigerator making loud noise since day 1. Technician said normal. It's NOT. Want replacement.",
+      "severity": "Critical"
+    },
+    {
+      "customer": "Sachin More",
+      "channel": "WhatsApp Business",
+      "message": "Mi Watch shows different price online \u2014 \u20b92000 less. Why price difference? Feeling cheated.",
+      "severity": "Medium"
+    },
+    {
+      "customer": "Anjali Kale",
+      "channel": "Google Review",
+      "message": "15 visits, always happy. Everything from cables to laptops. Quick billing, remember regulars.",
+      "severity": "Low"
+    }
+  ]
+}

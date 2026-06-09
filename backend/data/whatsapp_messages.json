@@ -1,25 +1,142 @@
 [
   {
-    "customer": "Rahul",
-    "channel": "WhatsApp",
+    "customer": "Rahul Sharma",
+    "channel": "WhatsApp Business",
     "incident_type": "Support Delay",
     "severity": "High",
-    "message": "Nobody responded to my issue."
+    "message": "Your POS system froze during peak hours yesterday and nobody from support responded for 12 days. I lost 3 hours of sales data. Very frustrated with QuickServe."
   },
-
   {
-    "customer": "Arjun",
-    "channel": "Email",
-    "incident_type": "Refund Request",
-    "severity": "Critical",
-    "message": "Refund my money immediately."
-  },
-
-  {
-    "customer": "Priya",
-    "channel": "Review",
+    "customer": "Priya Nair",
+    "channel": "Google Review",
     "incident_type": "Positive Feedback",
     "severity": "Low",
-    "message": "Amazing support experience!"
+    "message": "QuickServe's appointment booking module increased my salon bookings by 40%. The automated reminders reduced no-shows significantly. Excellent platform for service businesses."
+  },
+  {
+    "customer": "Arjun Patel",
+    "channel": "Email Support",
+    "incident_type": "Refund Request",
+    "severity": "Critical",
+    "message": "Your billing module has been down for 3 days. My cafe cannot process digital payments. I lost walk-in customers. Refund my subscription immediately or I'm switching to PetPooja."
+  },
+  {
+    "customer": "Sneha Reddy",
+    "channel": "WhatsApp Business",
+    "incident_type": "Feature Request",
+    "severity": "Medium",
+    "message": "QuickServe doesn't have a class scheduling module for gyms. I'm managing my batch timings manually on paper. Can you add group class booking? Competitors already have this."
+  },
+  {
+    "customer": "Vikram Singh",
+    "channel": "WhatsApp Business",
+    "incident_type": "Billing Issue",
+    "severity": "High",
+    "message": "I was charged twice for the Premium plan this month — ₹5,500 x 2. Also the GST invoice download is broken since last update. Fix this or I'll raise a chargeback."
+  },
+  {
+    "customer": "Meera Joshi",
+    "channel": "Email Support",
+    "incident_type": "Positive Feedback",
+    "severity": "Low",
+    "message": "The parent communication module in QuickServe is exactly what our school needed. Fee reminders and attendance alerts saved us 5 hours per week. Thank you for the education vertical!"
+  },
+  {
+    "customer": "Karthik Menon",
+    "channel": "WhatsApp Business",
+    "incident_type": "Technical Problem",
+    "severity": "High",
+    "message": "File uploads for project deliverables have been failing since yesterday on QuickServe. Error 500 every time. I cannot share client proofs on time. This is damaging my reputation."
+  },
+  {
+    "customer": "Anjali Gupta",
+    "channel": "Google Review",
+    "incident_type": "Positive Feedback",
+    "severity": "Low",
+    "message": "3.5 years with QuickServe and the inventory tracking module alone saved us from wastage worth ₹4 lakhs. Batch expiry alerts for organic produce are a lifesaver. Highly recommended."
+  },
+  {
+    "customer": "Rohan Desai",
+    "channel": "Email Support",
+    "incident_type": "Delivery Failure",
+    "severity": "Critical",
+    "message": "QuickServe's SMS notification system is completely broken. Booking confirmations are NOT reaching my travel customers. Lost 3 group tour bookings worth ₹2.5L this week. Fix this NOW."
+  },
+  {
+    "customer": "Divya Krishnan",
+    "channel": "WhatsApp Business",
+    "incident_type": "Feature Request",
+    "severity": "Medium",
+    "message": "QuickServe's analytics dashboard doesn't show season-wise sales trends for my boutique. I need to plan inventory for festivals but reports only show monthly totals. Competitors offer this."
+  },
+  {
+    "customer": "Amit Verma",
+    "channel": "Email Support",
+    "incident_type": "Support Delay",
+    "severity": "High",
+    "message": "22 days since I reported a critical API integration bug with QuickServe's REST API. My team cannot sync client data with our CRM. No response from engineering. Evaluating alternatives."
+  },
+  {
+    "customer": "Pooja Bhat",
+    "channel": "WhatsApp Business",
+    "incident_type": "Positive Feedback",
+    "severity": "Low",
+    "message": "QuickServe's online ordering integration boosted our takeaway revenue by 60%. The QR menu with real-time updates is a game changer for our restaurant. Customers love it."
+  },
+  {
+    "customer": "Sanjay Tiwari",
+    "channel": "WhatsApp Business",
+    "incident_type": "Pricing Issue",
+    "severity": "Critical",
+    "message": "QuickServe pricing went from ₹999 trial to ₹7,500/month — that's 3x jump with no warning. For a small construction firm doing project billing, this is too expensive. Cancel immediately."
+  },
+  {
+    "customer": "Lakshmi Iyer",
+    "channel": "Google Review",
+    "incident_type": "Positive Feedback",
+    "severity": "Low",
+    "message": "QuickServe's appointment module reduced pet grooming no-shows by 35%. Vaccination tracking and automated reminders are perfect for veterinary clinics. Pet parents love the reminder SMSes."
+  },
+  {
+    "customer": "Nikhil Rao",
+    "channel": "In-App Chat",
+    "incident_type": "Product Quality",
+    "severity": "Medium",
+    "message": "The 3D room visualization feature in QuickServe crashes on mobile browsers. My interior design clients want to preview layouts on their phones but it never renders properly. Only works on desktop."
+  },
+  {
+    "customer": "Tanvi Shah",
+    "channel": "Email Support",
+    "incident_type": "Positive Feedback",
+    "severity": "Low",
+    "message": "Managing 200 coworking members with QuickServe is seamless. Automated billing, access control, and meeting room booking saves us 20 hours monthly. Best investment for our space."
+  },
+  {
+    "customer": "Rajesh Kumar",
+    "channel": "WhatsApp Business",
+    "incident_type": "Delivery Failure",
+    "severity": "High",
+    "message": "QuickServe's GPS tracking integration showed wrong delivery locations 4 times this week. My logistics clients are complaining about misrouted packages. This module needs urgent fixing."
+  },
+  {
+    "customer": "Deepa Nandan",
+    "channel": "Email Support",
+    "incident_type": "Positive Feedback",
+    "severity": "Low",
+    "message": "Patient records and appointment scheduling on QuickServe reduced our clinic wait times by 50%. Prescription history lookup is instant now. Staff absolutely loves the interface."
+  },
+  {
+    "customer": "Suresh Pillai",
+    "channel": "WhatsApp Business",
+    "incident_type": "Poor Engagement",
+    "severity": "Critical",
+    "message": "Nobody from QuickServe visited for the promised on-site setup. The crop monitoring alerts stopped working right during harvest season. Lost significant yield because of missed frost warnings."
+  },
+  {
+    "customer": "Kavitha Mohan",
+    "channel": "In-App Chat",
+    "incident_type": "Feature Request",
+    "severity": "Medium",
+    "message": "QuickServe needs a video class recording feature for online coaching. Students want to replay sessions. Also the attendance report export to Excel is formatted incorrectly."
   }
 ]
